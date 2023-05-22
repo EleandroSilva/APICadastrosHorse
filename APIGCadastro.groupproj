@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{B95D6094-309E-428D-9871-C104FE6E6C35}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="APICadastros.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="APICadastros">
+        <MSBuild Projects="APICadastros.dproj"/>
+    </Target>
+    <Target Name="APICadastros:Clean">
+        <MSBuild Projects="APICadastros.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="APICadastros:Make">
+        <MSBuild Projects="APICadastros.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="APICadastros"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="APICadastros:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="APICadastros:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

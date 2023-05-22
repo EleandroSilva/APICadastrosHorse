@@ -1,0 +1,16 @@
+unit Controller.API.Interfaces;
+
+interface
+
+uses
+  Model.Factory.Entidade.Interfaces;
+
+type
+  iControllerAPI<T> = interface
+    ['{566754E8-1349-493D-A0C1-A8B4C3B41520}']
+    function ControllerAPI: iFactoryEntidade;
+  end;
+
+implementation
+
+end.

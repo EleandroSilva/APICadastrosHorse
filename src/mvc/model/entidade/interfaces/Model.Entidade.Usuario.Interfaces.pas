@@ -1,0 +1,29 @@
+unit Model.Entidade.Usuario.Interfaces;
+
+interface
+
+uses
+  Model.DAO.Entidade.Interfaces, System.Classes;
+
+type
+  iEntidadeUsuario = interface
+    ['{BB7F9D43-61C1-4D10-87AD-33127DCBDAA9}']
+    function Id(aValue : Integer)        : iEntidadeUsuario; overload;
+    function Id                          : Integer;          overload;
+    function IdEmpresa(aValue : Integer) : iEntidadeUsuario; overload;
+    function IdEmpresa                   : Integer;          overload;
+    function Nome(aValue : String)       : iEntidadeUsuario; overload;
+    function Nome                        : String;           overload;
+    function SobreNome(aValue : String)  : iEntidadeUsuario; overload;
+    function SobreNome                   : String;           overload;
+    function EMail(aValue : String)      : iEntidadeUsuario; overload;
+    function EMail                       : String;           overload;
+    function Senha(aValue : String)      : iEntidadeUsuario; overload;
+    function Senha                       : String;           overload;
+
+    function &End : iDAOEntidade<iEntidadeUsuario>;
+  end;
+
+implementation
+
+end.

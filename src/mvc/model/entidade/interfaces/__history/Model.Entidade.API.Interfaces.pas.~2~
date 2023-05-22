@@ -1,0 +1,15 @@
+unit Model.Entidade.API.Interfaces;
+
+interface
+
+type
+  iAPI<T> = interface
+    ['{EF043024-38C2-4A8D-A5FB-11FBF6C26FD0}']
+    function Registry<T>;
+
+    function This : T;
+  end;
+
+implementation
+
+end.

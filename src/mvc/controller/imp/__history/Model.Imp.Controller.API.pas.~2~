@@ -1,0 +1,15 @@
+unit Model.Imp.Controller.API;
+
+interface
+
+uses
+  Controller.API.Interfaces;
+
+type
+  TControllerAPI= class(TInterfacedObject, iControllerAPI)
+
+  end;
+
+implementation
+
+end.

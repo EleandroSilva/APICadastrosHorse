@@ -1,0 +1,22 @@
+unit Model.Imp.Factory.Entidade;
+
+interface
+
+uses
+  Model.Factory.Entidade.Interfaces,
+  Model.DAO.Entidade.Interfaces,
+  Model.Entidade.Usuario.Interfaces;
+
+type
+  TFactoryEntidade = class(TInterfacedObject, iFactoryEntidade)
+    private
+      FDAOUsuario : iDAOEntidade<iEntidadeUsuario>;
+    public
+      constructor Create;
+      destructor Destroy; override;
+      class function New: iFactoryEntidade;
+  end;
+
+implementation
+
+end.

@@ -1,0 +1,34 @@
+unit Uteis.Tratar.Exception;
+
+interface
+
+uses
+  System.SysUtils,
+  Vcl.Forms;
+
+
+type
+  TException = class
+    private
+      FlogFile : String;
+    public
+      constructor Create;
+      procedure TratarException(Sender : TObject; E : Exception);
+  end;
+
+implementation
+
+{ TException }
+
+constructor TException.Create;
+begin
+  FLogFile := ChangeFileExt(ParamStr(0), '.log');
+  Application.OnException := TratarException;
+end;
+
+procedure TException.TratarException(Sender: TObject; E: Exception);
+begin
+  //
+end;
+
+end.

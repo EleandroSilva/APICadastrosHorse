@@ -1,0 +1,7 @@
+unit Model.Factory.Controller.API.Interfaces;
+
+interface
+
+implementation
+
+end.

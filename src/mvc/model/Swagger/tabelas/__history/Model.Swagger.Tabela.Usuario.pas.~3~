@@ -1,0 +1,23 @@
+unit Model.Swagger.Tabela.Usuario;
+
+interface
+
+type
+  TUsuario = class
+    private
+      Fid        : Integer;
+      FidEmpresa : Integer;
+      FNome      : String;
+      FSobreNome : String;
+    public
+      property id        : Integer read Fid        write Fid;
+      property idEmpresa : Integer read Fidempresa write Fidempresa;
+      property Nome      : String  read FNome      write FNome;
+      property SobreNome : String  read FSobreNome write FSobreNome;
+  end;
+
+implementation
+
+
+
+end.

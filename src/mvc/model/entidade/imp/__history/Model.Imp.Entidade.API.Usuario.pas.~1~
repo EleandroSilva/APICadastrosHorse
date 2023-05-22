@@ -1,0 +1,7 @@
+unit Model.Imp.Entidade.API.Usuario;
+
+interface
+
+implementation
+
+end.

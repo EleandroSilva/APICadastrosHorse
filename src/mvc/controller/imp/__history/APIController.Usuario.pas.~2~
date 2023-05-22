@@ -1,0 +1,24 @@
+unit APIController.Usuario;
+
+interface
+
+uses
+  Controller.Interfaces,
+  Model.Imp.Controller;
+
+procedure Registry;
+
+implementation
+
+procedure Registry;
+var
+  LController : iController;
+begin
+  try
+    LController := TController.New;
+  finally
+
+  end;
+end;
+
+end.

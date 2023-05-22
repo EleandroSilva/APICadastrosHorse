@@ -1,0 +1,58 @@
+unit Model.Imp.Controller;
+
+interface
+
+uses
+  System.SysUtils,
+
+  Controller.Interfaces,
+  Model.Factory.Entidade.Interfaces,
+  Model.Imp.Factory.Entidade, FireDAC.Comp.Client;
+
+type
+  TController = class(TInterfacedObject, iController)
+  private
+    FFactoryEntidade : iFactoryEntidade;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    class function New : iController;
+
+    function Entidade : iFactoryEntidade;
+
+
+  end;
+
+implementation
+
+var
+  FQuery : TFDQuery;
+
+{ TController }
+
+constructor TController.Create;
+begin
+  FQuery := TFDQuery.Create(nil);
+end;
+
+destructor TController.Destroy;
+begin
+  //
+  inherited;
+end;
+
+class function TController.New: iController;
+begin
+  Result := Self.Create;
+end;
+
+function TController.Entidade: iFactoryEntidade;
+begin
+  if not Assigned(FFactoryEntidade) then
+    FFactoryEntidade := TFactoryEntidade.New;
+
+  Result := FFactoryEntidade;
+end;
+
+
+end.

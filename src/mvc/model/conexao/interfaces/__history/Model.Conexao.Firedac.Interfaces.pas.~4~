@@ -1,0 +1,19 @@
+unit Model.Conexao.Firedac.Interfaces;
+
+interface
+
+uses
+  Data.DB,
+  FireDAC.Comp.Client;
+
+type
+  iConexao = interface
+    ['{84579E1B-EE58-41AF-AAED-DC9B55F40F73}']
+    function Conexao(aValue : TFDConnection) : iConexao; overload;
+    function Conexao : TFDConnection; overload;
+    procedure ConfigurarMySQL;
+  end;
+
+implementation
+
+end.

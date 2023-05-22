@@ -1,0 +1,57 @@
+{*******************************************************}
+{                                                       }
+{                      ES Sistemas                      }
+{                                                       }
+{ Empresas de Sistemas 2003-2023 www.bemoreweb.com.br   }
+{                     (17)98169-5336                    }
+{                                                       }
+{*******************************************************}
+
+unit Uteis.Tratar.Exception;
+
+interface
+
+uses
+  System.SysUtils,
+  Vcl.Forms;
+
+
+type
+  TException = class
+    private
+      FlogFile : String;
+    public
+      constructor Create;
+      procedure TratarException(Sender : TObject; E : Exception);
+      procedure GravarLog(aValue : String);
+  end;
+
+implementation
+
+{ TException }
+
+constructor TException.Create;
+begin
+  FLogFile := ChangeFileExt(ParamStr(0), '.log');
+  Application.OnException := TratarException;
+end;
+
+procedure TException.GravarLog(aValue: String);
+var
+  LTXTLog : TextFile;
+begin
+  AssignFile(LTXTLog, FLogFile);
+  if FileExists(FLogFile) then
+    Append(LTXTLog) else Rewrite(LTXTLog);
+
+  Writeln(LTXTLog, aValue);
+end;
+
+procedure TException.TratarException(Sender: TObject; E: Exception);
+begin
+  //
+end;
+
+
+
+end.

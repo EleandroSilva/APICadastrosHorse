@@ -1,0 +1,13 @@
+unit Model.Entidade.API.Usuario.Interfaces;
+
+interface
+
+type
+  iAPIUsuario = interface
+    ['{EF043024-38C2-4A8D-A5FB-11FBF6C26FD0}']
+    function Registry;
+  end;
+
+implementation
+
+end.

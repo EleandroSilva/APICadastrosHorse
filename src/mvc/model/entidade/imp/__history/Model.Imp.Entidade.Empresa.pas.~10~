@@ -1,0 +1,146 @@
+unit Model.Imp.Entidade.Empresa;
+
+interface
+
+uses
+  Model.Entidade.Empresa.Interfaces,
+  Model.DAO.Entidade.Interfaces;
+
+type
+  TEntidadeEmpresa = class(TInterfacedObject, iEntidadeEmpresa)
+    private
+      [weak]
+      FParent          : iDAOEntidade<iEntidadeEmpresa>;
+      FId              : Integer;
+      FNomeEmpresarial : String;
+      FNomeFantasia    : String;
+      FCNPJ            : String;
+      FIE              : String;
+      FDD              : String;
+      FCelular         : String;
+    public
+      constructor Create(Parent :iDAOEntidade<iEntidadeEmpresa>);
+      destructor Destroy; override;
+      class function New(aParent : iDAOEntidade<iEntidadeEmpresa>): iEntidadeEmpresa;
+
+      function Id(aValue : Integer)             : iEntidadeEmpresa; overload;
+      function Id                               : Integer;          overload;
+      function NomeEmpresarial(aValue : String) : iEntidadeEmpresa; overload;
+      function NomeEmpresarial                  : String;           overload;
+      function NomeFantasia(aValue : String)    : iEntidadeEmpresa; overload;
+      function NomeFantasia                     : String;           overload;
+      function CNPJ(aValue : String)            : iEntidadeEmpresa; overload;
+      function CNPJ                             : String;           overload;
+      function IE(aValue : String)              : iEntidadeEmpresa; overload;
+      function IE                               : String;           overload;
+      function DD(aValue : String)              : iEntidadeEmpresa; overload;
+      function DD                               : String;           overload;
+      function Celular(aValue : String)         : iEntidadeEmpresa; overload;
+      function Celular                          : String;           overload;
+
+      function &End : iDAOEntidade<iEntidadeEmpresa>;
+  end;
+
+
+implementation
+
+{ TEntidadeEmpresa }
+
+constructor TEntidadeEmpresa.Create(Parent: iDAOEntidade<iEntidadeEmpresa>);
+begin
+  FParent := Parent;
+end;
+
+function TEntidadeEmpresa.&End: iDAOEntidade<iEntidadeEmpresa>;
+begin
+  Result := FParent;
+end;
+
+class function TEntidadeEmpresa.New(aParent: iDAOEntidade<iEntidadeEmpresa>): iEntidadeEmpresa;
+begin
+  Result := Self.Create(aParent);
+end;
+
+destructor TEntidadeEmpresa.Destroy;
+begin
+  inherited;
+end;
+
+function TEntidadeEmpresa.Celular(aValue: String): iEntidadeEmpresa;
+begin
+  Result := Self;
+  FCelular := aValue;
+end;
+
+function TEntidadeEmpresa.Celular: String;
+begin
+  Result := FCelular;
+end;
+
+function TEntidadeEmpresa.CNPJ(aValue: String): iEntidadeEmpresa;
+begin
+  Result := Self;
+  FCNPJ  := aValue;
+end;
+
+function TEntidadeEmpresa.CNPJ: String;
+begin
+  Result := FCNPJ;
+end;
+
+function TEntidadeEmpresa.DD(aValue: String): iEntidadeEmpresa;
+begin
+  Result := Self;
+  FDD    := aValue;
+end;
+
+function TEntidadeEmpresa.DD: String;
+begin
+  Result := FDD;
+end;
+
+function TEntidadeEmpresa.Id(aValue: Integer): iEntidadeEmpresa;
+begin
+  Result := Self;
+  FID    := aValue;
+end;
+
+function TEntidadeEmpresa.Id: Integer;
+begin
+  Result := FId;
+end;
+
+function TEntidadeEmpresa.IE(aValue: String): iEntidadeEmpresa;
+begin
+  Result := Self;
+  FIE    := aValue;
+end;
+
+function TEntidadeEmpresa.IE: String;
+begin
+  Result := FIE;
+end;
+
+function TEntidadeEmpresa.NomeEmpresarial(aValue: String): iEntidadeEmpresa;
+begin
+  Result := Self;
+  FNomeEmpresarial := aValue;
+end;
+
+function TEntidadeEmpresa.NomeEmpresarial: String;
+begin
+  Result := FNomeEmpresarial;
+end;
+
+function TEntidadeEmpresa.NomeFantasia(aValue: String): iEntidadeEmpresa;
+begin
+  Result := Self;
+  FNomeFantasia := aValue;
+end;
+
+function TEntidadeEmpresa.NomeFantasia: String;
+begin
+  Result := FNomeFantasia;
+end;
+
+end.

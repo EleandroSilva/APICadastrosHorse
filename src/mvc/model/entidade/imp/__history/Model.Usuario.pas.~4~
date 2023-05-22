@@ -1,0 +1,17 @@
+unit Model.Usuario;
+
+interface
+
+type
+  TUsuario = class
+    private
+      Fid: Integer;
+    public
+      property id: Integer read Fid write Fid;
+  end;
+
+implementation
+
+
+
+end.

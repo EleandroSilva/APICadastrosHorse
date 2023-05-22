@@ -1,0 +1,15 @@
+unit Model.Usuario;
+
+interface
+
+type
+  TUsuario = class
+    private
+      FId : Integer;
+    public
+      function Id : Integer;
+  end;
+
+implementation
+
+end.

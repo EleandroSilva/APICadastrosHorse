@@ -1,0 +1,131 @@
+unit Model.Imp.Query;
+
+interface
+
+uses
+  System.SysUtils,
+  System.Classes,
+  System.Types,
+
+  Data.DB,
+
+  FireDAC.Stan.Intf,
+  FireDAC.Stan.Option,
+  FireDAC.Stan.Error,
+  FireDAC.UI.Intf,
+  FireDAC.Phys.Intf,
+  FireDAC.Stan.Def,
+  FireDAC.Stan.Pool,
+  FireDAC.Stan.Async,
+  FireDAC.Phys,
+  FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef,
+  FireDAC.VCLUI.Wait,
+  FireDAC.Comp.Client,
+  FireDAC.Stan.Param,
+  FireDAC.DatS,
+  FireDAC.DApt.Intf,
+  FireDAC.DApt,
+  FireDAC.Comp.DataSet,
+
+  Model.Conexao.Firedac.Interfaces,
+  Model.Query,
+  Model.Imp.Conexao.Firedac.MySQL;
+
+type
+  TQuery = class(TInterfacedObject, iQuery)
+    private
+      FConexao : iConexao;
+      FQuery   : TFDQuery;
+    public
+      constructor Create;
+      destructor Destroy; override;
+      class function New : iQuery;
+
+      function DataSet(aDataSource : TDataSource): iQuery; overload;
+      function DataSet : TDataSet; overload;
+      function Params(aParams : String; Value : Variant) : iQuery; overload;
+      function Params(aParams : String): Variant; overload;
+      function SQL(aValue : String) : iQuery; overload;
+      function ExecSQL              : iQuery;
+      function Clear                : iQuery;
+      function Close                : iQuery;
+      function Open                 : iQuery;
+  end;
+
+implementation
+
+{ TQuery }
+
+constructor TQuery.Create;
+begin
+  FConexao := TModelConexaoFiredacMySQL.New;
+  FQuery  := TFDQuery.Create(nil);
+  FQuery.Connection := FConexao.Conexao;
+end;
+
+destructor TQuery.Destroy;
+begin
+  FreeAndNil(FQuery);
+  inherited;
+end;
+
+class function TQuery.New: iQuery;
+begin
+  Result := Self.Create;
+end;
+
+function TQuery.DataSet(aDataSource: TDataSource): iQuery;
+begin
+  Result := Self;
+  aDataSource.DataSet := FQuery;
+end;
+
+function TQuery.DataSet: TDataSet;
+begin
+  Result := FQuery;
+end;
+
+function TQuery.Params(aParams: String; Value: Variant): iQuery;
+begin
+  Result := Self;
+  FQuery.ParamByName(aParams).Value := Value;
+end;
+
+function TQuery.Params(aParams: String): Variant;
+begin
+  Result := FQuery.ParamByName(aParams).Value;
+end;
+
+function TQuery.SQL(aValue: String): iQuery;
+begin
+  Result := Self;
+  FQuery.SQL.Clear;
+  FQuery.SQL.Add(aValue);
+end;
+
+function TQuery.ExecSQL: iQuery;
+begin
+  Result := Self;
+  FQuery.ExecSQL;
+end;
+
+function TQuery.Clear: iQuery;
+begin
+  Result := Self;
+  FQuery.SQL.Clear;
+end;
+
+function TQuery.Close: iQuery;
+begin
+  Result := Self;
+  FQuery.Close;
+end;
+
+function TQuery.Open: iQuery;
+begin
+  Result := Self;
+  FQuery.Open;
+end;
+
+end.

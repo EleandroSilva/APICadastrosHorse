@@ -1,0 +1,13 @@
+unit Model.Factory.Controller.API.Interfaces;
+
+interface
+
+type
+  iFactoryControllerAPI = interface
+    ['{DB445B7E-D86F-4553-99C2-395737C0461A}']
+    function ControllerUsuario : iControllerUsuario;
+  end;
+
+implementation
+
+end.

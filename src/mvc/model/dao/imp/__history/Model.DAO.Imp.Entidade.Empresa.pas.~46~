@@ -1,0 +1,281 @@
+{*******************************************************}
+{                                                       }
+{                      ES Sistemas                      }
+{                                                       }
+{ Empresas de Sistemas 2003-2023 www.bemoreweb.com.br   }
+{                     (17)98169-5336                    }
+{                                                       }
+{*******************************************************}
+unit Model.DAO.Imp.Entidade.Empresa;
+
+interface
+
+uses
+  System.SysUtils,
+  System.JSON,
+
+  Data.db,
+
+  DataSet.Serialize,
+  Uteis.Tratar.Mensagens,
+
+  Model.DAO.Entidade.Interfaces,
+  Model.Entidade.Empresa.Interfaces,
+  Model.Conexao.Firedac.Interfaces,
+  Model.Query,
+  Model.Imp.Entidade.Empresa,
+  Model.Imp.Query,
+  Model.Imp.Conexao.Firedac.MySQL;
+
+type
+  TDAOEmpresa = class(TInterfacedObject, iDAOEntidade<iEntidadeEmpresa>)
+    private
+      FEmpresa : iEntidadeEmpresa;
+      FConexao : iConexao;
+      FDataSet : TDataSet;
+      FQuery   : iQuery;
+
+      FTratarMSG : TTratarMensagens;
+   const
+      FSQL=('select * from empresa');
+    public
+      constructor Create;
+      destructor Destroy; override;
+      class function New: iDAOEntidade<iEntidadeEmpresa>;
+
+      function DataSet(aDataSource : TDataSource)  : iDAOEntidade<iEntidadeEmpresa>; overload;
+      function DataSet                             : TDataSet;        overload;
+      function GetAll(aValue : String)             : iDAOEntidade<iEntidadeEmpresa>; overload;
+      function GetAll                              : TJSONArray;      overload;
+      function GetbyId(aId : Variant)              : iDAOEntidade<iEntidadeEmpresa>;
+      function GetbyParams(aField : String; aValue : Variant) : iDAOEntidade<iEntidadeEmpresa>;
+      function Post                                : iDAOEntidade<iEntidadeEmpresa>;
+      function Put                                 : iDAOEntidade<iEntidadeEmpresa>;
+      function Delete                              : iDAOEntidade<iEntidadeEmpresa>;
+
+      function This : iEntidadeEmpresa;
+  end;
+implementation
+
+{ TDAOEmpresa }
+
+constructor TDAOEmpresa.Create;
+begin
+  FEmpresa := TEntidadeEmpresa.New(Self);
+  FConexao := TModelConexaoFiredacMySQL.New;
+  FQuery   := TQuery.New;
+end;
+
+class function TDAOEmpresa.New: iDAOEntidade<iEntidadeEmpresa>;
+begin
+  Result := Self.Create;
+end;
+
+function TDAOEmpresa.This: iEntidadeEmpresa;
+begin
+  Result := FEmpresa;
+end;
+
+destructor TDAOEmpresa.Destroy;
+begin
+  inherited;
+end;
+
+function TDAOEmpresa.DataSet(aDataSource: TDataSource): iDAOEntidade<iEntidadeEmpresa>;
+begin
+  Result := Self;
+  if not Assigned(FDataset) then
+    aDataSource.DataSet := FQuery.DataSet
+  else
+    aDataSource.DataSet := FDataSet;
+end;
+
+function TDAOEmpresa.DataSet: TDataSet;
+begin
+  Result := FDataSet;
+end;
+
+function TDAOEmpresa.GetAll(aValue: String): iDAOEntidade<iEntidadeEmpresa>;
+begin
+  Result := Self;
+  try
+    try
+    FDataSet := FQuery
+                 .SQL(FSQL)
+                 .Open
+                 .DataSet;
+    except
+      raise Exception.Create(FTratarMSG.MSGerroGet);
+    end;
+  finally
+    if Assigned(FDataset) and FDataSet.IsEmpty then
+      raise Exception.Create(FTratarMSG.MSGnotGet);
+  end;
+end;
+
+function TDAOEmpresa.GetAll: TJSONArray;
+var
+  lDataSet : TDataSet;
+begin
+  try
+    try
+    lDataSet := FQuery
+               .SQL(FSQL)
+               .Open
+                .DataSet;
+    except
+      raise Exception.Create(FTratarMSG.MSGerroGet);
+    end;
+  finally
+    if Assigned(FDataset) and FDataSet.IsEmpty then
+      raise Exception.Create(FTratarMSG.MSGnotGet) else
+      Result := LDataSet.ToJSONArray();
+  end;
+end;
+
+function TDAOEmpresa.GetbyId(aId: Variant): iDAOEntidade<iEntidadeEmpresa>;
+begin
+  Result := Self;
+  try
+    try
+    FDataSet := FQuery
+                  .SQL(FSQL+' where Id=:Id')
+                  .Params('Id', aId)
+                  .Open
+                  .DataSet;
+    except
+      raise Exception.Create(FTratarMSG.MSGerroGet);
+    end;
+  finally
+    if Assigned(FDataset) and FDataSet.IsEmpty then
+      raise Exception.Create(FTratarMSG.MSGnotGet);
+  end;
+end;
+
+function TDAOEmpresa.GetbyParams(aField: String;aValue: Variant): iDAOEntidade<iEntidadeEmpresa>;
+var
+  lTexte : String;
+begin
+  Result := Self;
+  try
+    try
+      FDataSet := FQuery
+                  .SQL(FSQL+' where lower('+aField+') like lower(:'+aField+')')
+                  .Params(aField, aValue)
+                  .Open
+                  .DataSet;
+    except
+      raise Exception.Create(FTratarMSG.MSGerroGet);
+    end;
+  finally
+   if Assigned(FDataset) and FDataSet.IsEmpty then
+      raise Exception.Create(FTratarMSG.MSGnotGet);
+  end;
+end;
+
+function TDAOEmpresa.Post: iDAOEntidade<iEntidadeEmpresa>;
+const
+  LSQL=('insert into empresa('+
+                             'cnpj, '+
+                             'ie, '+
+                             'nomeempresarial, '+
+                             'nomefantasia, '+
+                             'dd, '+
+                             'celular '+
+                           ')'+
+                             ' values '+
+                           '('+
+                             ':cnpj, '+
+                             ':id, '+
+                             ':nomeempresarial, '+
+                             ':nomefantasia, '+
+                             ':dd, '+
+                             ':celular '+
+                            ')'
+       );
+begin
+  Result := Self;
+
+  FConexao.StartTransaction;
+  try
+    try
+      FQuery
+        .SQL(LSQL)
+          .Params('cnpj'            , FEmpresa.CNPJ)
+          .Params('ie'              , FEmpresa.IE)
+          .Params('nomeempresarial' , FEmpresa.NomeEmpresarial)
+          .Params('nomefantasia'    , FEmpresa.NomeFantasia)
+          .Params('dd'              , FEmpresa.DD)
+          .Params('celular'         , FEmpresa.Celular)
+        .ExecSQL;
+    except
+      FConexao.Rollback;
+      raise Exception.Create(FTratarMSG.MSGerroPost);
+    end;
+  finally
+    FConexao.Commit;
+    FDataSet := FQuery
+                    .SQL('select LAST_INSERT_ID ()').Open.DataSet;
+    raise Exception.Create(FTratarMSG.MSGokPost);
+  end;
+end;
+
+function TDAOEmpresa.Put: iDAOEntidade<iEntidadeEmpresa>;
+const
+  LSQL=('update empresa set '+
+        'cnpj=:cnpj, '+
+        'ie=:ie, '+
+        'nomeempresarial=:nomeempresarial, '+
+        'nomefantasia=:nomefantasia, '+
+        'dd=:dd, '+
+        'celular=:celular '+
+        'where id=:id '
+       );
+begin
+  Result := Self;
+
+  FConexao.StartTransaction;
+  try
+    try
+      FQuery
+        .SQL(LSQL)
+          .Params('id'              , FEmpresa.Id)
+          .Params('cnpj'            , FEmpresa.CNPJ)
+          .Params('ie'              , FEmpresa.IE)
+          .Params('nomeempresarial' , FEmpresa.NomeEmpresarial)
+          .Params('nomefantasia'    , FEmpresa.NomeFantasia)
+          .Params('dd'              , FEmpresa.DD)
+          .Params('celular'         , FEmpresa.Celular)
+        .ExecSQL;
+    except
+      FConexao.Rollback;
+      raise Exception.Create(FTratarMSG.MSGerroPut);
+    end;
+  finally
+    FConexao.Commit;
+    raise Exception.Create(FTratarMSG.MSGokPut);
+  end;
+end;
+
+function TDAOEmpresa.Delete: iDAOEntidade<iEntidadeEmpresa>;
+const
+  LSQL=('delete from empresa where id=:id ');
+begin
+  Result := self;
+  FConexao.StartTransaction;
+ try
+  try
+    FQuery.SQL(LSQL)
+            .Params('id', FEmpresa.Id)
+          .ExecSQL;
+  except
+    FConexao.Rollback;
+    raise Exception.Create(FTratarMSG.MSGerroDelete);
+  end;
+ finally
+   FConexao.Commit;
+   raise Exception.Create(FTratarMSG.MSGokDelete);
+ end;
+end;
+
+end.

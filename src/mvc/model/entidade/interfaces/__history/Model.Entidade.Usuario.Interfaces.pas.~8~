@@ -1,0 +1,24 @@
+unit Model.Entidade.Usuario.Interfaces;
+
+interface
+
+uses
+  Model.DAO.Entidade.Interfaces;
+
+type
+  iEntidadeUsuario = interface
+    ['{BB7F9D43-61C1-4D10-87AD-33127DCBDAA9}']
+    function Id(aValue : Variant) : iEntidadeUsuario; overload;
+    function Id : Variant; overload;
+    function IdEmpresa(aValue : Variant): iEntidadeUsuario; overload;
+    function IdEmpresa : Variant; overload;
+    function Nome(aValue : String) : iEntidadeUsuario; overload;
+    function Nome : String; overload;
+
+
+    function &End : iDAOEntidade<iEntidadeUsuario>;
+  end;
+
+implementation
+
+end.

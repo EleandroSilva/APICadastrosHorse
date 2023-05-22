@@ -1,0 +1,18 @@
+unit Model.Imp.Controller;
+
+interface
+
+uses
+  System.SysUtils,
+  Controller.Interfaces,
+  Model.Factory.Entidade.Interfaces;
+
+type
+  TController = class(TInterfacedObject, iController)
+  private
+    FFactoryEntidade : iFactoryEntidade;
+  end;
+
+implementation
+
+end.

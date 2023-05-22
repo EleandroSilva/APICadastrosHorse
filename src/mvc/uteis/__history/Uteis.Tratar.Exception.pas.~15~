@@ -1,0 +1,83 @@
+{*******************************************************}
+{                                                       }
+{                      ES Sistemas                      }
+{                                                       }
+{ Empresas de Sistemas 2003-2023 www.bemoreweb.com.br   }
+{                     (17)98169-5336                    }
+{                                                       }
+{*******************************************************}
+
+unit Uteis.Tratar.Exception;
+
+interface
+
+uses
+  System.SysUtils,
+  Vcl.Dialogs,
+  System.Classes,
+  Vcl.Forms;
+
+
+type
+  TException = class
+    private
+      FlogFile : String;
+    public
+      constructor Create;
+      procedure TratarException(Sender : TObject; E : Exception);
+      procedure GravarLog(aValue : String);
+  end;
+
+implementation
+
+
+{ TException }
+
+constructor TException.Create;
+begin
+  FLogFile := ChangeFileExt(ParamStr(0), '.log');
+  Application.OnException := TratarException;
+end;
+
+procedure TException.GravarLog(aValue: String);
+var
+  LTXTLog : TextFile;
+begin
+  AssignFile(LTXTLog, FLogFile);
+  if FileExists(FLogFile) then
+    Append(LTXTLog) else Rewrite(LTXTLog);
+
+
+  Writeln(LTXTLog, FormatDateTime('dd/mm/yyyy - ', now) + aValue);
+  CloseFile(LTXTLog);
+end;
+
+procedure TException.TratarException(Sender: TObject; E: Exception);
+begin
+  GravarLog('===================================================')
+  if TComponent(Sender) is TForm then
+  begin
+    GravarLog('Form: '+ TForm(Sender).Name);
+    GravarLog('Caption: '+ TForm(Sender).Caption);
+    GravarLog('Erro: '+ E.ClassName);
+    GravarLog('Erro: '+ E.Message);
+  end
+  else
+  begin
+    GravarLog('Form: '+ TForm(TComponent(Sender).Owner).Name);
+    GravarLog('Caption: '+ TForm(TComponent(Sender).Owner).Caption);
+    GravarLog('Erro: '+ E.ClassName);
+    GravarLog('Erro: '+ E.Message);
+  end;
+  ShowMessage(E.Message);
+end;
+
+var
+  FTratarException : TException;
+
+initialization
+  FTratarException := TException.Create;
+
+finalization
+  FreeAndNIl(FTratarException);
+end.

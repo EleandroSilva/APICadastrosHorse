@@ -1,0 +1,40 @@
+unit Model.Imp.Controller.API;
+
+interface
+
+uses
+  Controller.API.Interfaces,
+  Model.Factory.Controller.API.Interfaces;
+
+type
+  TControllerAPI= class(TInterfacedObject, iControllerAPI)
+    private
+      FFActoryControllerAPI : iFactoryControllerAPI;
+    public
+      constructor Create;
+      destructor Destroy; override;
+      class function New: iControllerAPI;
+
+  end;
+
+implementation
+
+{ TControllerAPI }
+
+constructor TControllerAPI.Create;
+begin
+  //
+end;
+
+destructor TControllerAPI.Destroy;
+begin
+  //
+  inherited;
+end;
+
+class function TControllerAPI.New: iControllerAPI;
+begin
+
+end;
+
+end.

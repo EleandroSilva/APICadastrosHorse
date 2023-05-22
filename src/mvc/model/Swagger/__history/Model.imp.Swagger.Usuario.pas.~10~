@@ -1,0 +1,53 @@
+unit Model.imp.Swagger.Usuario;
+
+interface
+
+uses
+  Horse.GBSwagger, Model.Swagger.Tabela.Usuario;
+
+type
+  TSwaggerUsuario = class
+   class procedure SwaggerUsuario;
+
+  end;
+
+implementation
+
+{ TSwaggerUsuario }
+
+class procedure TSwaggerUsuario.SwaggerUsuario;
+begin
+  //http://localhost:9000/swagger/doc/html   URL
+  Swagger
+      .Info
+       .Title('API ES Sistemas - Cadastros')
+       .Description('Documentação API ES Sistemas - Cadastros')
+       .Contact
+         .Name('Eleandro Silva')
+         .Email('eleandrosilva3107@gmail.com')
+         .URL('https://www.bemoreweb.com.br')
+      .&End
+     .&End
+     .BasePath('ess')
+     .Path('usuarios')
+       .Tag('Usuários')
+       .GET('Listar usuários')
+        .AddParamQuery('id', 'Id').&End
+        .AddParamQuery('nome', 'nome').&End
+        .AddParamQuery('sobrenome', 'sobrenome').&End
+        .AddParamPath('id','').&End
+        .AddResponse(200, 'Lista de usuários')
+         .Schema(TUsuario).IsArray(True).&End.&End
+        .POST('Criar novo usuário')
+         .AddParamPath('id', 'id').&End
+         .AddResponse(200, 'Lista de usuários')
+         .Schema(TUsuario).IsArray(True).&End.&End
+         .GET('{id} Obter os dados de um usuário específico')
+         .AddParamPath('id', 'id').&End
+         .AddResponse(200, 'Lista de usuários')
+         .Schema(TUsuario).IsArray(True).&End.&End;
+
+
+end;
+
+end.
